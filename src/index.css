@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+.font-name {
+  font-family: "Bebas Neue";
+  font-weight: 400;
+  font-style: normal;
+}
