@@ -1,8 +1,57 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 .font-name {
-  font-family: "Bebas Neue";
+  font-family: "Bebas Neue", sans-serif;
   font-weight: 400;
   font-style: normal;
+}
+
+
+.logo {
+  font-family: "Pacifico", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.text-inter {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.nav-link {
+            position: relative; /* Essencial para posicionar o pseudo-elemento */
+            padding-bottom: 5px; /* Espaço para o sublinhado não colar no texto */
+            text-decoration: none;
+            color: white;
+        }
+
+        /* O pseudo-elemento que será nosso sublinhado */
+        .nav-link::after {
+            content: ''; /* Pseudo-elementos precisam de 'content' */
+            position: absolute; /* Posição relativa ao .nav-link */
+            bottom: 0;
+            left: 0;
+            width: 0%; /* Começa com largura zero */
+            height: 3px; /* Espessura do sublinhado */
+            background-color: white; /* Cor do sublinhado */
+            border-radius: 9999px; /* Bordas super arredondadas (efeito de pílula) */
+            transition: width 0.3s ease-in-out; /* Animação suave da largura */
+        }
+
+        /* Quando passamos o mouse sobre o link, a largura do ::after vai para 100% */
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+
+
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: white;
 }

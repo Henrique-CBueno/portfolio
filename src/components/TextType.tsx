@@ -1,6 +1,7 @@
 'use client';
 
-import { ElementType, useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
+import { useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
+import type { ElementType } from 'react';
 import { gsap } from 'gsap';
 
 interface TextTypeProps {
@@ -61,9 +62,30 @@ const TextType = ({
     return Math.random() * (max - min) + min;
   }, [variableSpeed, typingSpeed]);
 
-  const getCurrentTextColor = () => {
-    if (textColors.length === 0) return '#ffffff';
-    return textColors[currentTextIndex % textColors.length];
+  const getCurrentTextStyle = () => {
+    if (textColors.length === 0) return {};
+    // Se for apenas uma cor, retorna color normal
+    if (textColors.length === 1 && !textColors[0].startsWith("linear-gradient")) {
+      return { color: textColors[0] };
+    }
+    // Se for um linear-gradient direto
+    if (textColors[0].startsWith("linear-gradient")) {
+      return {
+        background: textColors[0],
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+        color: "transparent"
+      };
+    }
+    // Se for várias cores, monta um linear-gradient
+    return {
+      background: `linear-gradient(90deg, ${textColors.join(", ")})`,
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      backgroundClip: "text",
+      color: "transparent"
+    };
   };
 
   useEffect(() => {
@@ -158,6 +180,7 @@ const TextType = ({
     pauseDuration,
     textArray,
     currentTextIndex,
+    getRandomSpeed,
     loop,
     initialDelay,
     isVisible,
@@ -176,7 +199,7 @@ const TextType = ({
       className: `inline-block whitespace-pre-wrap tracking-tight ${className}`,
       ...props
     },
-    <span className="inline" style={{ color: getCurrentTextColor() }}>
+    <span className="inline" style={getCurrentTextStyle()}>
       {displayedText}
     </span>,
     showCursor && (
