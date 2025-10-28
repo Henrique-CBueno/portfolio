@@ -2,8 +2,16 @@ import { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { GLTFLoader, OrbitControls } from "three/examples/jsm/Addons.js";
 
-export default function ModelViewer({ modelUrl, autoRotateSpeed = 0.01 }) {
-  const containerRef = useRef(null);
+interface ModelViewerProps {
+  modelUrl?: string;
+  autoRotateSpeed?: number;
+}
+
+export default function ModelViewer({ 
+  modelUrl, 
+  autoRotateSpeed = 0.01 
+}: ModelViewerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -11,8 +19,6 @@ export default function ModelViewer({ modelUrl, autoRotateSpeed = 0.01 }) {
 
     // --- Scene, camera, renderer
     const scene = new THREE.Scene();
-    // Removido o background
-    // scene.background = new THREE.Color(0x0b0f1a);
 
     const camera = new THREE.PerspectiveCamera(
       45,
@@ -25,8 +31,8 @@ export default function ModelViewer({ modelUrl, autoRotateSpeed = 0.01 }) {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    // Fundo transparente
+    // Removido outputEncoding (deprecated no Three.js r152+)
+    // Use renderer.outputColorSpace = THREE.SRGBColorSpace se necessário
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
@@ -88,8 +94,8 @@ export default function ModelViewer({ modelUrl, autoRotateSpeed = 0.01 }) {
     controls.enableZoom = true;
     controls.zoomSpeed = 0.8;
     controls.enableRotate = true;
-    controls.minDistance = 3; // distância mínima de zoom
-    controls.maxDistance = 6; // distância máxima de zoom
+    controls.minDistance = 3;
+    controls.maxDistance = 6;
     controls.maxPolarAngle = Math.PI - 0.1;
     controls.minPolarAngle = 0.1;
 
@@ -104,7 +110,7 @@ export default function ModelViewer({ modelUrl, autoRotateSpeed = 0.01 }) {
     window.addEventListener("resize", onResize);
 
     // --- Loop de animação
-    let rafId;
+    let rafId: number;
     const animate = () => {
       rafId = requestAnimationFrame(animate);
       rotatingGroup.rotation.y += autoRotateSpeed;
@@ -119,10 +125,14 @@ export default function ModelViewer({ modelUrl, autoRotateSpeed = 0.01 }) {
       window.removeEventListener("resize", onResize);
       controls.dispose();
       rotatingGroup.traverse((obj) => {
-        if (obj.isMesh) {
-          obj.geometry?.dispose();
-          if (Array.isArray(obj.material)) obj.material.forEach((m) => m.dispose());
-          else obj.material?.dispose();
+        if ((obj as THREE.Mesh).isMesh) {
+          const mesh = obj as THREE.Mesh;
+          mesh.geometry?.dispose();
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach((m: THREE.Material) => m.dispose());
+          } else {
+            mesh.material?.dispose();
+          }
         }
       });
       if (renderer.domElement && renderer.domElement.parentNode === container) {

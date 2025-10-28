@@ -11,7 +11,7 @@ export default function CardFullScr({ fullScr, setFullScr, selectedCard }: { ful
                                                                 w-full h-full relative cursor-pointer"
                                                 >
                                                     {/* Imagem */}
-                                                    <div className="p-6">
+                                                    <div className="p-6" onClick={() => console.log(fullScr)}>
                                                         <img
                                                             src='/projetos/flashideas.png'
                                                             alt={`Preview do projeto ${selectedCard}`}
