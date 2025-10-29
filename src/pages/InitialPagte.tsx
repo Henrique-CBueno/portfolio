@@ -4,7 +4,7 @@ import Home from "./sections/Home";
 import About from "./sections/About";
 import Hability from "./sections/Hability";
 import Projects from "./sections/Projects";
-import Folder from "../components/Folder";
+import Selector from "../components/Selector";
 
 
 export default function InitialPage({cursor, setCursor}: {cursor: any, setCursor: any}) {
@@ -42,6 +42,9 @@ export default function InitialPage({cursor, setCursor}: {cursor: any, setCursor
                             </li>
                         </ul>
                     </nav>
+                    <div className="flex items-center justify-end">
+                        <Selector cursor={cursor} setCursor={setCursor}/>
+                    </div>
                 </GlassSurface>
             </header>
             {
