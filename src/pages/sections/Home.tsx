@@ -7,7 +7,7 @@ import TextType from "../../components/TextType";
 export default function Home() {
     return (
         <div className="w-[80%] mx-auto h-full grid grid-cols-2 justify-center items-center gap-4">
-                <div className="w-full h-full flex flex-col justify-center items-center gap-8">
+                <div className="w-full h-full flex text-start flex-col justify-center items-start gap-8">
                     <TextType
                         text={"Henrique Bueno"}
                         typingSpeed={75}

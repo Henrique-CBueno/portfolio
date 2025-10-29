@@ -28,7 +28,7 @@ export default function Hability() {
             transition={{ duration: 0.7, ease: "easeOut" }} 
             className="w-[80%] mx-auto h-full flex items-center justify-center"
         >
-            <div className="h-[90%] w-full bg-white/10 rounded-xl shadow-lg grid grid-cols-4 gap-4">
+            <div className="h-[90%] w-full bg-white/10 rounded-xl shadow-lg grid grid-cols-4 gap-4 p-4">
                 {
                     habilitys.map((hability) => (
                         <HabilityCarrd key={hability.name} name={hability.name} icon={hability.icon}/>

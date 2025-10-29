@@ -4,9 +4,10 @@ import Home from "./sections/Home";
 import About from "./sections/About";
 import Hability from "./sections/Hability";
 import Projects from "./sections/Projects";
+import Folder from "../components/Folder";
 
 
-export default function InitialPage() {
+export default function InitialPage({cursor, setCursor}: {cursor: any, setCursor: any}) {
     const [nav, setNav] = useState(1)
 
     return (
