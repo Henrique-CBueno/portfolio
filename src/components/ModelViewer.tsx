@@ -7,9 +7,9 @@ interface ModelViewerProps {
   autoRotateSpeed?: number;
 }
 
-export default function ModelViewer({ 
-  modelUrl, 
-  autoRotateSpeed = 0.01 
+export default function ModelViewer({
+  modelUrl,
+  autoRotateSpeed = 0.01,
 }: ModelViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -31,8 +31,6 @@ export default function ModelViewer({
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(container.clientWidth, container.clientHeight);
-    // Removido outputEncoding (deprecated no Three.js r152+)
-    // Use renderer.outputColorSpace = THREE.SRGBColorSpace se necessário
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
@@ -99,15 +97,33 @@ export default function ModelViewer({
     controls.maxPolarAngle = Math.PI - 0.1;
     controls.minPolarAngle = 0.1;
 
-    // --- Resize handler
+    // --- Resize handler (agora com Debounce) ---
+    
+    // Variável para guardar o ID do timer do debounce
+    let resizeTimer: ReturnType<typeof setTimeout>
+
     const onResize = () => {
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      // Limpa qualquer timer pendente anterior
+      clearTimeout(resizeTimer);
+
+      // Define um novo timer
+      resizeTimer = setTimeout(() => {
+        if (!container) return; // Garante que o container ainda existe
+
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+
+        if (w === 0 || h === 0) return; // Evita erro de divisão por zero
+
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      }, 100); // Atraso de 100ms. Ajuste se necessário.
     };
-    window.addEventListener("resize", onResize);
+
+    // Observa o container
+    const resizeObserver = new ResizeObserver(onResize);
+    resizeObserver.observe(container);
 
     // --- Loop de animação
     let rafId: number;
@@ -122,8 +138,10 @@ export default function ModelViewer({
     // --- Cleanup
     return () => {
       cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", onResize);
+      resizeObserver.disconnect();
+      clearTimeout(resizeTimer); // *** IMPORTANTE: Limpa o timer no cleanup ***
       controls.dispose();
+      
       rotatingGroup.traverse((obj) => {
         if ((obj as THREE.Mesh).isMesh) {
           const mesh = obj as THREE.Mesh;
