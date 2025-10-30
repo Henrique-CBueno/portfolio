@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Ribbons from './components/Ribbons';
 import LiquidEther from "./components/LiquidEther";
 import InitialPage from "./pages/InitialPagte";
-import PixelTrail from './components/PixelTrail";
+import PixelTrail from './components/PixelTrail'
 
 function App() {
   const [cursor, setCursor] = useState(1);
