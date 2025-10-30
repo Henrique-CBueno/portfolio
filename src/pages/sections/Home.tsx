@@ -1,5 +1,5 @@
 
-import ModelViewer from "../../components/ModelViewer";
+// import ModelViewer from "../../components/ModelViewer";
 import TextType from "../../components/TextType";
 import { motion } from "framer-motion";
 
@@ -28,14 +28,14 @@ export default function Home() {
                         className="lg:text-6xl text-5xl text-white font-bold font-name"
                     />
                 </div>
-                {
+                {/* {
                     (window.innerWidth >= 1024) ? (
                         <div className="w-full h-full justify-center items-center z-2 cursor-grab flex">
                             <ModelViewer
                                 modelUrl="retro-television\source\model.glb"
                             />
                         </div>
-                    ) : (
+                    ) : ( */}
                         <motion.div
                         className="w-full h-full justify-center items-center z-2 cursor-grab flex overflow-visible"
                         initial={{ opacity: 0, y: 30, scale: 0.9 }}
@@ -69,9 +69,9 @@ export default function Home() {
                             dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }}
                         />
                         </motion.div>
-                    )
+                    {/* )
                         
-                }
+                } */}
             </div>
     )
 }
