@@ -21,29 +21,50 @@
 }
 
 .nav-link {
-            position: relative; /* Essencial para posicionar o pseudo-elemento */
-            padding-bottom: 5px; /* Espaço para o sublinhado não colar no texto */
-            text-decoration: none;
-            color: white;
-        }
+  position: relative;
+  padding-bottom: 5px;
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease;
+}
 
-        /* O pseudo-elemento que será nosso sublinhado */
-        .nav-link::after {
-            content: ''; /* Pseudo-elementos precisam de 'content' */
-            position: absolute; /* Posição relativa ao .nav-link */
-            bottom: 0;
-            left: 0;
-            width: 0%; /* Começa com largura zero */
-            height: 3px; /* Espessura do sublinhado */
-            background-color: white; /* Cor do sublinhado */
-            border-radius: 9999px; /* Bordas super arredondadas (efeito de pílula) */
-            transition: width 0.3s ease-in-out; /* Animação suave da largura */
-        }
+/* Sub-linha animada */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background-color: white;
+  border-radius: 9999px;
+  transition: width 0.3s ease-in-out;
+}
 
-        /* Quando passamos o mouse sobre o link, a largura do ::after vai para 100% */
-        .nav-link:hover::after {
-            width: 100%;
-        }
+/* Hover — anima a entrada da linha */
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Estado ativo/selecionado — linha permanente */
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Opcional: cor mais intensa no ativo */
+.nav-link.active {
+  color: #fff;
+}
+
+.hide-scroll {
+  /* Oculta visualmente a barra de rolagem */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer e Edge antigo */
+}
+
+.hide-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari e Opera */
+}
 
 
 

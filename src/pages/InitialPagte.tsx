@@ -29,7 +29,7 @@ export default function InitialPage({
   };
 
   return (
-    <div className="h-full p-6 grid grid-rows-[auto_1fr]">
+    <div className="h-full px-6 pt-6 lg:pb-6 grid grid-rows-[auto_1fr]">
       {/* ================= HEADER ================= */}
       <header className="flex justify-center items-center z-40 relative">
         {/* ----- Desktop Navbar ----- */}
@@ -54,10 +54,10 @@ export default function InitialPage({
                 <li
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`cursor-pointer transition-colors duration-300 ${
+                  className={`nav-link cursor-pointer ${
                     nav === item.id
-                      ? "text-white font-semibold border-b-2 border-white"
-                      : "text-white/70 hover:text-white"
+                      ? "text-white active"
+                      : "text-white/70 "
                   }`}
                 >
                   {item.label}
@@ -159,7 +159,7 @@ export default function InitialPage({
       </header>
 
       {/* ================= CONTENT ================= */}
-      <main className="overflow-hidden">
+      <main className="overflow-x-hidden hide-scroll">
         {nav === 1 && <Home />}
         {nav === 2 && <About />}
         {nav === 3 && <Hability />}

@@ -55,9 +55,10 @@ export default function Home() {
                             y: [0, -8, 0], // flutuação leve
                             }}
                             transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut",
+                                duration: 2,
+                                repeat: Infinity,
+                                repeatType: "mirror", // 🔥 movimento contínuo sem pulo
+                                ease: "easeInOut",
                             }}
                             whileHover={{
                             scale: 1.05,
