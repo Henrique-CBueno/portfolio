@@ -17,7 +17,7 @@ export default function Selector({cursor, setCursor}: {cursor: any, setCursor: a
   const current = CURSOR_ORDER[currentIndex];
 
   const handleClick = () => {
-    if(cursor == 3) {
+    if(cursor == 1) {
         setCurrentIndex(0)
         setCursor(0)
         return 

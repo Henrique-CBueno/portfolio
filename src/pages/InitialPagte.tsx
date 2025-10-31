@@ -5,6 +5,7 @@ import About from "./sections/About";
 import Hability from "./sections/Hability";
 import Projects from "./sections/Projects";
 import Selector from "../components/Selector";
+import Contact from "./sections/Contact";
 
 export default function InitialPage({
   cursor,
@@ -21,6 +22,7 @@ export default function InitialPage({
     { id: 2, label: "Sobre", icon: "👤" },
     { id: 3, label: "Habilidades", icon: "⚡" },
     { id: 4, label: "Projetos", icon: "💼" },
+    { id: 5, label: "Contato", icon: "💬" }
   ];
 
   const handleNavClick = (id: number) => {
@@ -164,6 +166,7 @@ export default function InitialPage({
         {nav === 2 && <About />}
         {nav === 3 && <Hability />}
         {nav === 4 && <Projects />}
+        {nav === 5 && <Contact />}
       </main>
     </div>
   );

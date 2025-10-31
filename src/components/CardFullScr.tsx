@@ -1,31 +1,38 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { IoClose } from "react-icons/io5";
-import { FaGithub, FaExternalLinkAlt, FaReact, FaPython, FaDocker, FaNodeJs, FaSass } from "react-icons/fa";
-import { SiNextdotjs, SiTailwindcss, SiFigma, SiMongodb, SiTypescript, SiAxios, SiCss3, SiFastapi, SiPrisma, SiPostgresql, SiOpencv, SiTensorflow, SiLangchain, SiOpenai } from "react-icons/si";
+import { TechLogo } from "./techLogo";
+import { TechIcons } from "../icons/tech";
 
-export default function CardFullScr({ fullScr, setFullScr, selectedCard }: { fullScr: boolean; setFullScr: (value: boolean) => void; selectedCard: any }) {
-  // Mapeamento de ícones das tecnologias
-  const techIcons: Record<string, any> = {
-    "React.js": FaReact,
-    "FastAPI": SiFastapi,
-    "PostgreSQL": SiPostgresql,
-    "Docker": FaDocker,
-    "Next.js": SiNextdotjs,
-    "Next": SiNextdotjs,
-    "Tailwind CSS": SiTailwindcss,
-    "Figma": SiFigma,
-    "Node.js": FaNodeJs,
-    "MongoDB": SiMongodb,
-    "Sass": FaSass,
-    "TypeScript": SiTypescript,
-    "Axios": SiAxios,
-    "CSS3": SiCss3,
-    "Prisma": SiPrisma,
-    "Python": FaPython,
-    "OpenCV": SiOpencv,
-    "TensorFlow": SiTensorflow,
-    "LangChain": SiLangchain,
-    "OpenAI API": SiOpenai,
+type TechIconName = keyof typeof TechIcons;
+
+interface CardFullScrProps {
+  fullScr: boolean;
+  setFullScr: (value: boolean) => void;
+  selectedCard: any;
+}
+
+export default function CardFullScr({ fullScr, setFullScr, selectedCard }: CardFullScrProps) {
+  // Mapeamento de nomes das tecnologias para os logos
+  const techIcons: Record<string, TechIconName> = {
+    "React.js": "React",
+    "FastAPI": "FastAPI",
+    "PostgreSQL": "PostgreSQL",
+    "Docker": "Docker",
+    "Next.js": "Next",
+    "Next": "Next",
+    "Tailwind CSS": "Tailwind",
+    "Figma": "Figma",
+    "Node.js": "Node",
+    "MongoDB": "MongoDB",
+    "Sass": "Sass",
+    "TypeScript": "Typescript",
+    "Axios": "React", // Axios não tem ícone, usei React como fallback
+    "CSS3": "Css3",
+    "Prisma": "Prisma",
+    "Python": "Python",
+    "OpenCV": "OpenCV",
+    "TensorFlow": "TensorFlow",
+    "LangChain": "Langchain",
+    "OpenAI API": "OpenAI",
   };
 
   return (
@@ -62,7 +69,7 @@ export default function CardFullScr({ fullScr, setFullScr, selectedCard }: { ful
                          rounded-full transition-all duration-300 backdrop-blur-sm
                          shadow-lg shadow-purple-500/50 cursor-pointer"
             >
-              <IoClose className="w-6 h-6 text-white" />
+              <TechLogo name="close" className="w-6 h-6 text-white" />
             </motion.button>
 
             {/* Container com scroll customizado */}
@@ -79,7 +86,6 @@ export default function CardFullScr({ fullScr, setFullScr, selectedCard }: { ful
 
               {/* Conteúdo */}
               <div className="p-8 md:p-12">
-                {/* Título */}
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -88,7 +94,6 @@ export default function CardFullScr({ fullScr, setFullScr, selectedCard }: { ful
                   {selectedCard.name}
                 </motion.h2>
 
-                {/* Descrição */}
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -107,34 +112,31 @@ export default function CardFullScr({ fullScr, setFullScr, selectedCard }: { ful
                     Tecnologias Utilizadas
                   </h3>
                   <div className="flex flex-wrap gap-4">
-                    {selectedCard.techs?.map((tech: any, index: any) => {
-                      const IconComponent = techIcons[tech.name] || FaReact;
-                      return (
-                        <motion.div
-                          key={tech.id}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ 
-                            delay: 0.5 + index * 0.1,
-                            type: "spring",
-                            stiffness: 260,
-                            damping: 20
-                          }}
-                          className="flex items-center gap-3 px-5 py-3 
-                                     bg-white/5 hover:bg-white/10 
-                                     border border-white/10 hover:border-purple-500/50
-                                     rounded-xl transition-all duration-300
-                                     backdrop-blur-sm group cursor-pointer
-                                     hover:scale-110 hover:-translate-y-1
-                                     hover:shadow-lg hover:shadow-purple-500/20"
-                        >
-                          <IconComponent className="w-8 h-8 text-[#BDA8FF] group-hover:text-purple-400 transition-colors duration-300" />
-                          <span className="text-[#BDA8FF] font-medium text-base">
-                            {tech.name}
-                          </span>
-                        </motion.div>
-                      );
-                    })}
+                    {selectedCard.techs?.map((tech: any, index: any) => (
+                      <motion.div
+                        key={tech.id}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ 
+                          delay: 0.5 + index * 0.1,
+                          type: "spring",
+                          stiffness: 260,
+                          damping: 20
+                        }}
+                        className="flex items-center gap-3 px-5 py-3 
+                                   bg-white/5 hover:bg-white/10 
+                                   border border-white/10 hover:border-purple-500/50
+                                   rounded-xl transition-all duration-300
+                                   backdrop-blur-sm group cursor-pointer
+                                   hover:scale-110 hover:-translate-y-1
+                                   hover:shadow-lg hover:shadow-purple-500/20"
+                      >
+                        <TechLogo name={techIcons[tech.name] || "React"} className="w-8 h-8 text-[#BDA8FF] group-hover:text-purple-400 transition-colors duration-300" />
+                        <span className="text-[#BDA8FF] font-medium text-base">
+                          {tech.name}
+                        </span>
+                      </motion.div>
+                    ))}
                   </div>
                 </motion.div>
 
@@ -158,7 +160,7 @@ export default function CardFullScr({ fullScr, setFullScr, selectedCard }: { ful
                                shadow-lg shadow-purple-500/30
                                transition-colors duration-300 group cursor-pointer"
                   >
-                    <FaExternalLinkAlt className="w-5 h-5" />
+                    <TechLogo name="external-link" className="w-5 h-5" />
                     Ver Demo
                   </motion.button>
 
@@ -175,7 +177,7 @@ export default function CardFullScr({ fullScr, setFullScr, selectedCard }: { ful
                                border border-white/20 hover:border-purple-500/50
                                backdrop-blur-sm transition-all duration-300 group cursor-pointer"
                   >
-                    <FaGithub className="w-6 h-6" />
+                    <TechLogo name="github" className="w-6 h-6" />
                     Ver no GitHub
                   </motion.button>
                 </motion.div>
@@ -208,33 +210,13 @@ export default function CardFullScr({ fullScr, setFullScr, selectedCard }: { ful
               </div>
             </div>
 
-            {/* Estilo customizado do scrollbar */}
+            {/* Scrollbar custom */}
             <style>{`
-              .scrollbar-custom::-webkit-scrollbar {
-                width: 10px;
-              }
-              
-              .scrollbar-custom::-webkit-scrollbar-track {
-                background: rgba(255, 255, 255, 0.05);
-                border-radius: 10px;
-                margin: 10px;
-              }
-              
-              .scrollbar-custom::-webkit-scrollbar-thumb {
-                background: linear-gradient(180deg, #7D3CFF 0%, #9867FF 100%);
-                border-radius: 10px;
-                border: 2px solid rgba(255, 255, 255, 0.1);
-              }
-              
-              .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-                background: linear-gradient(180deg, #9867FF 0%, #B491FF 100%);
-              }
-              
-              /* Firefox */
-              .scrollbar-custom {
-                scrollbar-width: thin;
-                scrollbar-color: #7D3CFF rgba(255, 255, 255, 0.05);
-              }
+              .scrollbar-custom::-webkit-scrollbar { width: 10px; }
+              .scrollbar-custom::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius:10px; margin:10px; }
+              .scrollbar-custom::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7D3CFF 0%, #9867FF 100%); border-radius:10px; border:2px solid rgba(255,255,255,0.1);}
+              .scrollbar-custom::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #9867FF 0%, #B491FF 100%);}
+              .scrollbar-custom { scrollbar-width: thin; scrollbar-color: #7D3CFF rgba(255, 255, 255, 0.05);}
             `}</style>
           </motion.div>
         </motion.div>

@@ -51,6 +51,7 @@ export default function Home() {
                             src="avatar-2-semBG.png"
                             alt="Avatar"
                             className="scale-150 select-none"
+                            loading="lazy"
                             animate={{
                             y: [0, -8, 0], // flutuação leve
                             }}
