@@ -1,5 +1,12 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import Loading from './components/Loading';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './pages/sections/Home';
+import About from './pages/sections/About';
+import Hability from './pages/sections/Hability';
+import Projects from './pages/sections/Projects';
+import Contact from './pages/sections/Contact';
+import NotFound from './components/404';
 
 // Lazy load dos componentes pesados
 const Ribbons = lazy(() => import('./components/Ribbons'));
@@ -36,7 +43,21 @@ function App() {
           )}
 
           <div className="absolute w-full h-full">
-            <InitialPage cursor={cursor} setCursor={setCursor} />
+            <BrowserRouter>
+              <Routes>
+                <Route path='/page' element={<InitialPage cursor={cursor} setCursor={setCursor} />}>
+                  <Route path='' element={<Home />}/>
+                  <Route path='inicio' element={<Home />}/>
+                  <Route path='sobre' element={<About />}/>
+                  <Route path='habilidades' element={<Hability />}/>
+                  <Route path='projetos' element={<Projects />}/>
+                  <Route path='contato' element={<Contact />}/>
+                </Route>
+                <Route path='*' element={<InitialPage cursor={cursor} setCursor={setCursor} />}>
+                  <Route path='*' element={<NotFound />}/>
+                </Route>
+              </Routes>
+            </BrowserRouter>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 // import ModelViewer from "../../components/ModelViewer";
 import TextType from "../../components/TextType";
 import { motion } from "framer-motion";
+import avatar from "/public/avatar-2-semBG.png";
 
 
 
@@ -48,7 +49,7 @@ export default function Home() {
                         }}
                         >
                         <motion.img
-                            src="avatar-2-semBG.png"
+                            src={avatar}
                             alt="Avatar"
                             className="scale-150 select-none"
                             loading="lazy"

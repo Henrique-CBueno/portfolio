@@ -1,11 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import GlassSurface from "../components/GlassSurface";
-import Home from "./sections/Home";
-import About from "./sections/About";
-import Hability from "./sections/Hability";
-import Projects from "./sections/Projects";
 import Selector from "../components/Selector";
-import Contact from "./sections/Contact";
 
 export default function InitialPage({
   cursor,
@@ -14,20 +10,35 @@ export default function InitialPage({
   cursor: any;
   setCursor: any;
 }) {
-  const [nav, setNav] = useState(1);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [nav, setNav] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const menuItems = [
-    { id: 1, label: "Início", icon: "🏠" },
-    { id: 2, label: "Sobre", icon: "👤" },
-    { id: 3, label: "Habilidades", icon: "⚡" },
-    { id: 4, label: "Projetos", icon: "💼" },
-    { id: 5, label: "Contato", icon: "💬" }
+    { id: 1, label: "Início", icon: "🏠", path: "/page" },
+    { id: 2, label: "Sobre", icon: "👤", path: "/page/sobre" },
+    { id: 3, label: "Habilidades", icon: "⚡", path: "/page/habilidades" },
+    { id: 4, label: "Projetos", icon: "💼", path: "/page/projetos" },
+    { id: 5, label: "Contato", icon: "💬", path: "/page/contato" }
   ];
 
+  
+  useEffect(() => {
+    const currentItem = menuItems.find(item => item.path === location.pathname);
+    if (currentItem) {
+      setNav(currentItem.id);
+    } else {
+      setNav(null);
+    }
+  }, [location.pathname]);
+
   const handleNavClick = (id: number) => {
-    setNav(id);
-    setMenuOpen(false);
+    const item = menuItems.find(i => i.id === id);
+    if (item) {
+      navigate(item.path);
+      setMenuOpen(false);
+    }
   };
 
   return (
@@ -44,7 +55,7 @@ export default function InitialPage({
           <div className="flex justify-start items-center">
             <span
               className="logo text-4xl font-bold cursor-pointer select-none transition-transform duration-[800ms] hover:rotate-[360deg]"
-              onClick={() => setNav(1)}
+              onClick={() => handleNavClick(1)}
             >
               HB
             </span>
@@ -81,7 +92,7 @@ export default function InitialPage({
           contentClassName="flex justify-between items-center px-6 py-4"
         >
           <span
-            onClick={() => setNav(1)}
+            onClick={() => handleNavClick(1)}
             className="text-3xl font-bold text-white select-none cursor-pointer"
           >
             HB
@@ -91,34 +102,34 @@ export default function InitialPage({
             onClick={() => setMenuOpen(!menuOpen)}
             className="relative flex flex-col justify-between w-8 h-6 focus:outline-none z-50 group"
             aria-label="Abrir menu"
-            >
+          >
             <span
-                className={`block w-full h-0.5 bg-white rounded transition-all duration-300 ${
+              className={`block w-full h-0.5 bg-white rounded transition-all duration-300 ${
                 menuOpen ? "rotate-45 translate-y-[7px]" : "group-hover:scale-x-110"
-                }`}
+              }`}
             />
             <span
-                className={`block w-full h-0.5 bg-white rounded transition-all duration-300 ${
+              className={`block w-full h-0.5 bg-white rounded transition-all duration-300 ${
                 menuOpen ? "opacity-0 scale-x-0" : "group-hover:scale-x-90"
-                }`}
+              }`}
             />
             <span
-                className={`block w-full h-0.5 bg-white rounded transition-all duration-300 ${
+              className={`block w-full h-0.5 bg-white rounded transition-all duration-300 ${
                 menuOpen ? "-rotate-45 -translate-y-[7px]" : "group-hover:scale-x-110"
-                }`}
+              }`}
             />
-            </button>
+          </button>
         </GlassSurface>
 
-                    {/* MENU MOBILE */}
+        {/* MENU MOBILE */}
         <div
-        className={`fixed top-[90px] left-4 right-4 z-40 transform transition-all duration-500 ${
+          className={`fixed top-[90px] left-4 right-4 z-40 transform transition-all duration-500 ${
             menuOpen
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-4 pointer-events-none"
-        }`}
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 -translate-y-4 pointer-events-none"
+          }`}
         >
-        <div
+          <div
             className="
             rounded-2xl 
             bg-white/10 
@@ -129,26 +140,26 @@ export default function InitialPage({
             duration-500
             py-2
             "
-        >
+          >
             <ul className="flex flex-col gap-2">
-            {menuItems.map((item, index) => (
+              {menuItems.map((item, index) => (
                 <li
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`px-6 py-4 cursor-pointer flex items-center gap-3 transition-all w-[95%] mx-auto rounded-2xl duration-300 ${
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`px-6 py-4 cursor-pointer flex items-center gap-3 transition-all w-[95%] mx-auto rounded-2xl duration-300 ${
                     index !== menuItems.length - 1 ? "border-b border-white/10" : ""
-                } ${
+                  } ${
                     nav === item.id
-                    ? "text-white font-semibold bg-white/20"
-                    : "text-white/70 hover:text-white hover:bg-white/10"
-                }`}
+                      ? "text-white font-semibold bg-white/20"
+                      : "text-white/70 hover:text-white hover:bg-white/10"
+                  }`}
                 >
-                <span className="text-xl">{item.icon}</span>
-                <span className="text-lg">{item.label}</span>
+                  <span className="text-xl">{item.icon}</span>
+                  <span className="text-lg">{item.label}</span>
                 </li>
-            ))}
+              ))}
             </ul>
-        </div>
+          </div>
         </div>
 
         {/* Overlay */}
@@ -162,11 +173,7 @@ export default function InitialPage({
 
       {/* ================= CONTENT ================= */}
       <main className="overflow-x-hidden hide-scroll">
-        {nav === 1 && <Home />}
-        {nav === 2 && <About />}
-        {nav === 3 && <Hability />}
-        {nav === 4 && <Projects />}
-        {nav === 5 && <Contact />}
+        <Outlet />
       </main>
     </div>
   );
