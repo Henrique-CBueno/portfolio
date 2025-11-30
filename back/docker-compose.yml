@@ -24,9 +24,12 @@ services:
       context: .
       dockerfile: Dockerfile.api
     container_name: portfolio_api
+    # A seção ports expõe para a internet DIRETO pelo IP. 
+    # Se quiser acessar só pela URL do Coolify, pode remover ou comentar isso.
     ports:
       - "${API_PORT:-9999}:9999"
     environment:
+      # ... (suas envs continuam iguais) ...
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379/0"
       PORT: "9999"
       PYTHONUNBUFFERED: "1"
@@ -47,8 +50,20 @@ services:
     restart: unless-stopped
     networks:
       - portfolio_network
+    
+    # --- AQUI ESTÁ A CORREÇÃO DO TRAEFIK ---
+    labels:
+      - "traefik.enable=true"
+      # Aponta o proxy para a porta interna 9999
+      - "traefik.http.services.api.loadbalancer.server.port=9999"
+      # Garante que use a rota segura
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=letsencrypt"
+
+    # --- CORREÇÃO DO HEALTHCHECK ---
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9999/"]
+      # Mudei para /docs ou remova o -f se quiser manter na raiz
+      test: ["CMD", "curl", "-f", "http://localhost:9999/docs"] 
       interval: 30s
       timeout: 10s
       retries: 3
