@@ -25,10 +25,10 @@ services:
       dockerfile: Dockerfile.api
     container_name: portfolio_api
     ports:
-      - "${API_PORT:-8000}:8000"
+      - "${API_PORT:-9999}:9999"
     environment:
       REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379/0"
-      PORT: "8000"
+      PORT: "9999"
       PYTHONUNBUFFERED: "1"
       MAIL_SERVER: "${MAIL_SERVER}"
       MAIL_PORT: "${MAIL_PORT}"
@@ -43,12 +43,12 @@ services:
       redis:
         condition: service_healthy
     command: >
-      uvicorn main:app --host 0.0.0.0 --port 8000
+      uvicorn main:app --host 0.0.0.0 --port 9999
     restart: unless-stopped
     networks:
       - portfolio_network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      test: ["CMD", "curl", "-f", "http://localhost:9999/"]
       interval: 30s
       timeout: 10s
       retries: 3
