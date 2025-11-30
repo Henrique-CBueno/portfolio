@@ -1,9 +1,0 @@
-FROM redis:7-alpine
-
-# Criar volume para dados persistentes
-VOLUME ["/data"]
-
-# Expor porta padrão
-EXPOSE 6379
-
-# Redis será iniciado com requirepass via docker-compose

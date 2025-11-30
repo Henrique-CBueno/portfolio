@@ -4,13 +4,14 @@ services:
   redis:
     image: redis:7-alpine
     container_name: portfolio_redis
-    command: redis-server --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD must be set}
+    command: >
+      sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
     ports:
       - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      test: ["CMD", "redis-cli", "-a", "$REDIS_PASSWORD", "ping"]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -26,22 +27,23 @@ services:
     ports:
       - "${API_PORT:-8000}:8000"
     environment:
-      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
-      - PORT=8000
-      - PYTHONUNBUFFERED=1
-      - MAIL_SERVER=${MAIL_SERVER}
-      - MAIL_PORT=${MAIL_PORT}
-      - MAIL_USERNAME=${MAIL_USERNAME}
-      - MAIL_PASSWORD=${MAIL_PASSWORD}
-      - MAIL_FROM=${MAIL_FROM}
-      - SMTP_TO=${SMTP_TO}
-      - EMAIL_RATE_LIMIT=${EMAIL_RATE_LIMIT:-10}
-      - EMAIL_RATE_WINDOW_SECONDS=${EMAIL_RATE_WINDOW_SECONDS:-120}
-      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
+      REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379/0"
+      PORT: "8000"
+      PYTHONUNBUFFERED: "1"
+      MAIL_SERVER: "${MAIL_SERVER}"
+      MAIL_PORT: "${MAIL_PORT}"
+      MAIL_USERNAME: "${MAIL_USERNAME}"
+      MAIL_PASSWORD: "${MAIL_PASSWORD}"
+      MAIL_FROM: "${MAIL_FROM}"
+      SMTP_TO: "${SMTP_TO}"
+      EMAIL_RATE_LIMIT: "${EMAIL_RATE_LIMIT:-10}"
+      EMAIL_RATE_WINDOW_SECONDS: "${EMAIL_RATE_WINDOW_SECONDS:-120}"
+      BACKEND_CORS_ORIGINS: "${BACKEND_CORS_ORIGINS}"
     depends_on:
       redis:
         condition: service_healthy
-    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    command: >
+      uvicorn main:app --host 0.0.0.0 --port 8000
     restart: unless-stopped
     networks:
       - portfolio_network
@@ -57,18 +59,19 @@ services:
       dockerfile: Dockerfile.celery
     container_name: portfolio_celery
     environment:
-      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
-      - PYTHONUNBUFFERED=1
-      - MAIL_SERVER=${MAIL_SERVER}
-      - MAIL_PORT=${MAIL_PORT}
-      - MAIL_USERNAME=${MAIL_USERNAME}
-      - MAIL_PASSWORD=${MAIL_PASSWORD}
-      - MAIL_FROM=${MAIL_FROM}
-      - SMTP_TO=${SMTP_TO}
+      REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379/0"
+      PYTHONUNBUFFERED: "1"
+      MAIL_SERVER: "${MAIL_SERVER}"
+      MAIL_PORT: "${MAIL_PORT}"
+      MAIL_USERNAME: "${MAIL_USERNAME}"
+      MAIL_PASSWORD: "${MAIL_PASSWORD}"
+      MAIL_FROM: "${MAIL_FROM}"
+      SMTP_TO: "${SMTP_TO}"
     depends_on:
       redis:
         condition: service_healthy
-    command: celery -A service.emailService.celery_app worker --pool solo -l info --queues celery
+    command: >
+      celery -A service.emailService.celery_app worker --pool solo -l info --queues celery
     restart: unless-stopped
     networks:
       - portfolio_network
@@ -79,4 +82,3 @@ volumes:
 networks:
   portfolio_network:
     driver: bridge
-
