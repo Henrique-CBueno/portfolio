@@ -1,7 +1,6 @@
 import logging
 import os
 import smtplib
-import traceback
 from email.message import EmailMessage
 from pathlib import Path
 
@@ -13,17 +12,15 @@ load_dotenv()
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-BASE_DIR = Path(__file__).resolve().parents[1]
-BROKER_ROOT = BASE_DIR / "runtime" / "celery"
-
 # Configurações do Celery via variáveis de ambiente
-REDIS_BROKER = os.getenv("REDIS_BROKER")
-REDIS_BACKEND = os.getenv("REDIS_BACKEND")
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+
+logger.info(f"Inicializando Celery com REDIS_URL: {REDIS_URL}")
 
 celery_app = Celery(
 	"email_service",
-	broker=REDIS_BROKER,
-	backend=REDIS_BACKEND,
+	broker=REDIS_URL,
+	backend=REDIS_URL,
 )
 
 celery_app.conf.update(

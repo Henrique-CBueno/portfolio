@@ -4,8 +4,6 @@ import os
 from pathlib import Path
 from threading import Lock
 import time
-import subprocess
-import sys
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, status
@@ -16,8 +14,6 @@ import uvicorn
 load_dotenv()
 from projects.projects import projects
 from service.emailService import enqueue_contact_email
-
-load_dotenv()
 
 
 class ContactRequest(BaseModel):
@@ -59,29 +55,7 @@ def _enforce_rate_limit() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-	import threading
-	
-	def start_celery_worker():
-		celery_cmd = [
-			sys.executable,
-			"-m",
-			"celery",
-			"-A",
-			"service.emailService.celery_app",
-			"worker",
-			"--pool",
-			"solo",
-			"-l",
-			"debug",
-			"--queues",
-			"celery",
-		]
-		subprocess.Popen(celery_cmd, cwd=Path(__file__).parent)
-	
-	worker_thread = threading.Thread(target=start_celery_worker, daemon=True)
-	worker_thread.start()
-	
-	yield
+    yield
 
 app = FastAPI(lifespan=lifespan)
 
