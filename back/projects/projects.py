@@ -1,4 +1,4 @@
-export const projects = [
+projects = [
   {
     "id": 1,
     "name": "FlashIdeas",
@@ -99,4 +99,4 @@ export const projects = [
       { "id": 25, "img": "/icons/tailwind.svg", "name": "Tailwind CSS" }
     ]
   }
-];
+]

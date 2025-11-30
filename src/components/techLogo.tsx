@@ -18,6 +18,18 @@ export const TechLogo: React.FC<TechLogoProps> = ({
 
   if (!Icon) return null;
 
+  if (typeof Icon === "string") {
+    return (
+      <img
+        src={Icon}
+        alt={name}
+        width={size}
+        height={size}
+        className={className}
+      />
+    );
+  }
+
   // Se for Simple Icon
   if ("hex" in Icon && "path" in Icon) {
     return (

@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
-import UseEmblaCarousel from "embla-carousel-react"; // ← Import normal
+import { useSearchParams } from "react-router-dom";
+import useEmblaCarousel from "embla-carousel-react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
-
-
-import { projects } from './../../../projects.ts';
 import CardFullScr from "../../components/CardFullScr.tsx";
+import axios from "axios";
+import Loading from "../../components/Loading";
 
 // Componente de Card isolado
 const ProjectCard = ({ item, onClick }: any) => (
@@ -65,7 +65,34 @@ const ProjectCard = ({ item, onClick }: any) => (
 );
 
 export default function Projects() {
-    const [emblaRef, emblaApi] = UseEmblaCarousel({ 
+    const [projects, setProjects] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchProjects() {
+        try {
+            setLoading(true);
+            const { data } = await axios.get("http://localhost:9999");
+            console.log("Projetos carregados:", data);
+            if (Array.isArray(data.Projects)) {
+            setProjects(data.Projects);
+            } else {
+            setProjects([]);
+            }
+        } catch (error) {
+            if (!axios.isCancel(error)) {
+            console.error("Falha ao carregar projetos:", error);
+            setProjects([]);
+            }
+        } finally {
+            setLoading(false);
+        }
+        }
+
+        fetchProjects();
+    }, []);
+
+    const [emblaRef, emblaApi] = useEmblaCarousel({ 
         loop: false, 
         align: "start",
         slidesToScroll: 1,
@@ -74,12 +101,29 @@ export default function Projects() {
                 slidesToScroll: 3,
             }
         }
+        
     });
 
     const [fullscr, setFullScr] = useState(false);
     const [selectedCard, setSelectedCard] = useState({});
     const [canScrollPrev, setCanScrollPrev] = useState(false);
     const [canScrollNext, setCanScrollNext] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const totalSlides = projects.length;
+    const prevIndexRef = useRef<number | null>(null);
+    const hasInitializedRef = useRef(false);
+
+    const clampSlide = useCallback(
+        (value: number) => {
+            if (totalSlides <= 0 || !Number.isFinite(value)) return 0;
+            return Math.max(0, Math.min(value, totalSlides - 1));
+        },
+        [totalSlides]
+    );
+
+    const slideParam = searchParams.get("slide");
+    const hasSlideParam = slideParam !== null && !Number.isNaN(Number(slideParam));
+    const targetSlide = clampSlide(hasSlideParam ? Number(slideParam) : 0);
 
     const scrollPrev = useCallback(() => {
         emblaApi?.scrollPrev();
@@ -90,13 +134,36 @@ export default function Projects() {
     }, [emblaApi]);
 
     const onSelect = useCallback(() => {
-        if (!emblaApi) return;
-        setCanScrollPrev(emblaApi.canScrollPrev());
-        setCanScrollNext(emblaApi.canScrollNext());
-    }, [emblaApi]);
+        if (!emblaApi || !hasInitializedRef.current) return;
+        const canPrev = emblaApi.canScrollPrev();
+        const canNext = emblaApi.canScrollNext();
+        const index = emblaApi.selectedScrollSnap();
+        setCanScrollPrev(canPrev);
+        setCanScrollNext(canNext);
+        if (prevIndexRef.current === index) return;
+        prevIndexRef.current = index;
+        if ((searchParams.get("slide") ?? "") !== index.toString()) {
+            const next = new URLSearchParams(searchParams);
+            next.set("slide", index.toString());
+            setSearchParams(next, { replace: true });
+        }
+    }, [emblaApi, searchParams, setSearchParams]);
 
     useEffect(() => {
         if (!emblaApi) return;
+
+        if (!hasInitializedRef.current) {
+            emblaApi.scrollTo(targetSlide);
+            prevIndexRef.current = targetSlide;
+            hasInitializedRef.current = true;
+
+            if (!hasSlideParam) {
+                const next = new URLSearchParams(searchParams);
+                next.set("slide", targetSlide.toString());
+                setSearchParams(next, { replace: true });
+            }
+        }
+
         onSelect();
         emblaApi.on('select', onSelect);
         emblaApi.on('reInit', onSelect);
@@ -104,16 +171,18 @@ export default function Projects() {
             emblaApi.off('select', onSelect);
             emblaApi.off('reInit', onSelect);
         };
-    }, [emblaApi, onSelect]);
+    }, [emblaApi, targetSlide, hasSlideParam, searchParams, setSearchParams, onSelect]);
 
     const handleCardClick = useCallback((item: any) => {
         setSelectedCard(item);
         setFullScr(true);
     }, []);
 
-    if (fullscr) {
+    if (loading) {
         return (
-                <CardFullScr fullScr={fullscr} setFullScr={setFullScr} selectedCard={selectedCard}/>
+            <div className="flex items-center justify-center h-full w-full">
+                <Loading />
+            </div>
         );
     }
 
@@ -165,6 +234,14 @@ export default function Projects() {
                     </motion.button>
                 </div>
             </div>
+
+            {fullscr && (
+                <CardFullScr
+                    fullScr={fullscr}
+                    setFullScr={setFullScr}
+                    selectedCard={selectedCard}
+                />
+            )}
         </motion.div>
     );
 }

@@ -1,5 +1,8 @@
 // src/components/icons/tech.ts (ou onde estiver seu arquivo)
-
+import redisIcon from "./redisIcon.svg";
+import liferay from "./liferay.svg";
+import Java from "./java.svg";
+import Agno from "./Agno.svg";
 import {
     siJavascript,
     siTypescript,
@@ -22,6 +25,7 @@ import {
     siOpencv,
     siTensorflow,
     siOpenai,
+    
   } from "simple-icons"; // <-- CORREÇÃO APLICADA AQUI
   
   import { X, ExternalLink, Github } from "lucide-react";
@@ -49,7 +53,11 @@ import {
     OpenCV: siOpencv,
     TensorFlow: siTensorflow,
     OpenAI: siOpenai,
-  
+    Redis: redisIcon,
+    liferay: liferay,
+    Java: Java, // Substitua pelo ícone correto de Java
+    Agno: Agno,
+    
     // Ícones do Lucide
     close: X,
     'external-link': ExternalLink,

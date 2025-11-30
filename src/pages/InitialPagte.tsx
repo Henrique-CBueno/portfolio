@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import GlassSurface from "../components/GlassSurface";
 import Selector from "../components/Selector";
 
@@ -12,15 +12,16 @@ export default function InitialPage({
 }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [nav, setNav] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const menuItems = [
-    { id: 1, label: "Início", icon: "🏠", path: "/page" },
-    { id: 2, label: "Sobre", icon: "👤", path: "/page/sobre" },
-    { id: 3, label: "Habilidades", icon: "⚡", path: "/page/habilidades" },
-    { id: 4, label: "Projetos", icon: "💼", path: "/page/projetos" },
-    { id: 5, label: "Contato", icon: "💬", path: "/page/contato" }
+    { id: 1, label: "Início", icon: "🏠", path: "/" },
+    { id: 2, label: "Sobre", icon: "👤", path: "/sobre" },
+    { id: 3, label: "Habilidades", icon: "⚡", path: "/habilidades" },
+    { id: 4, label: "Projetos", icon: "💼", path: "/projetos" },
+    { id: 5, label: "Contato", icon: "💬", path: "/contato" }
   ];
 
   
@@ -36,7 +37,8 @@ export default function InitialPage({
   const handleNavClick = (id: number) => {
     const item = menuItems.find(i => i.id === id);
     if (item) {
-      navigate(item.path);
+      const queryString = searchParams.toString();
+      navigate(item.path + (queryString ? `?${queryString}` : ""));
       setMenuOpen(false);
     }
   };

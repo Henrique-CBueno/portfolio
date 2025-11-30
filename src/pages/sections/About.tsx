@@ -10,7 +10,7 @@ export default function About() {
   >
     <div className="flex items-center justify-center">
       <div className="flex flex-col lg:flex-row items-center lg:gap-8 xl:gap-15 text-center w-full">
-        <div className="rounded-full bg-[url(/public/avatar-teste.jpeg)] w-50 h-50 bg-cover bg-center border-4 border-white shadow-lg flex-shrink-0"></div>
+        <div className="rounded-full bg-[url(/public/avatar-teste.png)] w-50 h-50 bg-cover bg-center border-4 border-white shadow-lg flex-shrink-0"></div>
         <h1 className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl mt-4 lg:mt-0">Sobre Mim</h1>
       </div>
     </div>

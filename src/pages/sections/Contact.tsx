@@ -4,9 +4,21 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { UIIcons } from "../../icons/ui";  // Seu arquivo de UI icons
+import axios from "axios";
 
 export default function ContactSection() {
   const [sent, setSent] = useState(false);
+
+  function handleSand(values: { name: string; email: string; message: string }) {
+    console.log("Enviando dados:", values);
+    axios.post("http://localhost:9999/contact", values)
+      .then(response => {
+        console.log("Resposta do servidor:", response.data);
+      })
+      .catch(error => {
+        console.error("Erro ao enviar dados:", error);
+      });
+  }
 
   const formik = useFormik({
     initialValues: { name: "", email: "", message: "" },
@@ -17,6 +29,7 @@ export default function ContactSection() {
     }),
     onSubmit: (values, { resetForm }) => {
       console.log("📩 Dados enviados:", values);
+      handleSand(values);
       setSent(true);
       resetForm();
       setTimeout(() => setSent(false), 3000); // Esconde após 3 segundos

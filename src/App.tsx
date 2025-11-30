@@ -45,7 +45,7 @@ function App() {
           <div className="absolute w-full h-full">
             <BrowserRouter>
               <Routes>
-                <Route path='/page' element={<InitialPage cursor={cursor} setCursor={setCursor} />}>
+                <Route path='/' element={<InitialPage cursor={cursor} setCursor={setCursor} />}>
                   <Route path='' element={<Home />}/>
                   <Route path='inicio' element={<Home />}/>
                   <Route path='sobre' element={<About />}/>

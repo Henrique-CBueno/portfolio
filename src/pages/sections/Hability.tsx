@@ -21,7 +21,7 @@ const HABILITIES = [
     { name: "Docker", icon: "Docker" },
     { name: "Git", icon: "Git" },
     { name: "FastAPI", icon: "FastAPI" },
-    { name: "Prisma", icon: "Prisma" },
+    { name: "Agno", icon: "Agno" },
     { name: "Postgress", icon: "PostgreSQL" },
 ];
 
