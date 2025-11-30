@@ -149,7 +149,7 @@ export default function ContactSection() {
           </motion.button>
 
           <motion.a
-            href="https://linkedin.com/in/seu-perfil"
+            href="https://linkedin.com/in/henrique-cbueno"
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.04 }}
