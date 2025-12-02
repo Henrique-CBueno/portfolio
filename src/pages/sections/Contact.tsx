@@ -11,7 +11,7 @@ export default function ContactSection() {
 
   function handleSand(values: { name: string; email: string; message: string }) {
     console.log("Enviando dados:", values);
-    axios.post("http://localhost:9999/contact", values)
+    axios.post("meudominio", values)
       .then(response => {
         console.log("Resposta do servidor:", response.data);
       })

@@ -72,7 +72,7 @@ export default function Projects() {
         async function fetchProjects() {
         try {
             setLoading(true);
-            const { data } = await axios.get("http://localhost:9999");
+            const { data } = await axios.get("meudominio");
             console.log("Projetos carregados:", data);
             if (Array.isArray(data.Projects)) {
             setProjects(data.Projects);
