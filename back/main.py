@@ -63,7 +63,6 @@ origins_env = os.getenv("BACKEND_CORS_ORIGINS", "*")
 origins = ["*"] if origins_env == "*" else [origin.strip() for origin in origins_env.split(",") if origin.strip()]
 allow_credentials = origins != ["*"]
 
-print(f"CORS Origins: {origins}, Allow Credentials: {allow_credentials}")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
