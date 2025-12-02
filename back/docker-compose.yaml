@@ -30,18 +30,15 @@ services:
       - "${API_PORT:-9999}:9999"
     environment:
       # ... (suas envs continuam iguais) ...
-      REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379/0"
+      REDIS_URL: "${REDIS_URL}"
       PORT: "9999"
       PYTHONUNBUFFERED: "1"
-      MAIL_SERVER: "${MAIL_SERVER}"
-      MAIL_PORT: "${MAIL_PORT}"
-      MAIL_USERNAME: "${MAIL_USERNAME}"
-      MAIL_PASSWORD: "${MAIL_PASSWORD}"
+      RESEND_API_KEY: "${RESEND_API_KEY}"
       MAIL_FROM: "${MAIL_FROM}"
       SMTP_TO: "${SMTP_TO}"
       EMAIL_RATE_LIMIT: "${EMAIL_RATE_LIMIT:-10}"
       EMAIL_RATE_WINDOW_SECONDS: "${EMAIL_RATE_WINDOW_SECONDS:-120}"
-      BACKEND_CORS_ORIGINS: "${BACKEND_CORS_ORIGINS}"
+      BACKEND_CORS_ORIGINS: '${BACKEND_CORS_ORIGINS}'
     depends_on:
       redis:
         condition: service_healthy
@@ -63,7 +60,7 @@ services:
     # --- CORREÇÃO DO HEALTHCHECK ---
     healthcheck:
       # Mudei para /docs ou remova o -f se quiser manter na raiz
-      test: ["CMD", "curl", "-f", "http://localhost:9999/docs"] 
+      test: ["CMD", "curl", "-f", "http://localhost:9999/health"] 
       interval: 30s
       timeout: 10s
       retries: 3
@@ -74,12 +71,9 @@ services:
       dockerfile: Dockerfile.celery
     container_name: portfolio_celery
     environment:
-      REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379/0"
+      REDIS_URL: "${REDIS_URL}"
       PYTHONUNBUFFERED: "1"
-      MAIL_SERVER: "${MAIL_SERVER}"
-      MAIL_PORT: "${MAIL_PORT}"
-      MAIL_USERNAME: "${MAIL_USERNAME}"
-      MAIL_PASSWORD: "${MAIL_PASSWORD}"
+      RESEND_API_KEY: "${RESEND_API_KEY}"
       MAIL_FROM: "${MAIL_FROM}"
       SMTP_TO: "${SMTP_TO}"
     depends_on:
