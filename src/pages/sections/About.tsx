@@ -17,7 +17,11 @@ export default function About() {
     <div className="flex justify-center items-start py-4">
       <div className="w-full h-fit bg-white/10 rounded-xl p-3 sm:p-6 lg:p-8 mt-3 lg:mt-8 shadow-lg flex items-center justify-center">
         <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-start lg:text-justify leading-relaxed">
-          Oi, sou Henrique, desenvolvedor de Software especializado em transformar ideias em softwares completos com interfaces envolventes e intuitivas, usando HTML, CSS, TypeScript, React, Python e Banco de Dados. Tenho um olhar atento para detalhes e gosto de criar aplicações que sejam funcionais, rápidas e visualmente atraentes. Viso muito também desenvolver aplicações automatizadas para facilitar muito o dia a dia do usuário. Além de código bem estruturado, valorizo a experiência do usuário e busco soluções criativas para cada projeto. Sempre buscando inspiração para o próximo desafio!
+          Olá, sou Henrique Bueno, Desenvolvedor Fullstack especializado em criar soluções robustas e escaláveis com Java (Spring Boot) e React.<br/>
+
+          Tenho experiência na construção de aplicações de alta disponibilidade, desde portais governamentais críticos até plataformas SaaS baseadas em microsserviços e IA. Meu foco é unir a segurança e a performance do backend com interfaces envolventes e intuitivas no frontend.<br/>
+
+          Valorizo código limpo e arquitetura sólida (SOLID, Clean Code), mas sem perder de vista a experiência do usuário e a automação de processos para facilitar o dia a dia. Estou sempre em busca de desafios que exijam criatividade técnica e entrega de valor real.
         </p>
       </div>
     </div>
